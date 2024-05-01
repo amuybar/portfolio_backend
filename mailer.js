@@ -1,17 +1,17 @@
 const nodemailer = require('nodemailer');
 const { google } = require('googleapis');
-const credentials = require('./credentials/credentials.json');
+require('dotenv').config(); 
 
 async function sendEmail(emailOptions) {
   try {
     const oAuth2Client = new google.auth.OAuth2(
-      credentials.web.client_id,
-      credentials.web.client_secret,
-      credentials.web.redirect_uris[0]
+      process.env.CLIENT_ID,
+      process.env.CLIENT_SECRET,
+      process.env.REDIRECT_URI
     );
 
     oAuth2Client.setCredentials({
-      refresh_token: credentials.web.refresh_token
+      refresh_token: process.env.REFRESH_TOKEN
     });
 
     const accessToken = await oAuth2Client.getAccessToken();
@@ -21,9 +21,9 @@ async function sendEmail(emailOptions) {
       auth: {
         type: 'OAuth2',
         user: 'b2837365@gmail.com',
-        clientId: credentials.web.client_id,
-        clientSecret: credentials.web.client_secret,
-        refreshToken: credentials.web.refresh_token,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN,
         accessToken: accessToken.token // Use accessToken.token
       }
     });
